@@ -8,7 +8,7 @@ This is an example of instantiation:
 	$some_var = new Mailchimp('APIKEY');
 
 ##Example 2
-This is how you call a function
+This is an example of how to call a function
 
 	try {
 
