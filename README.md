@@ -12,8 +12,8 @@ This is an example of how to call a function
 
 	try {
 
-		$somevariable->HTTP-METHOD__Some_Resource(argument 1, argument 2, etc.);
-		var_dump($somevariable->return);
+		$some_var->VERB_Some_Resource(argument 1, argument 2, etc.);
+		var_dump($some_var->return);
 
 	} catch (exception $e) {
 
