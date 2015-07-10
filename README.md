@@ -12,7 +12,7 @@ This is an example of how to call a function
 
 	try {
 
-		$some_var->VERB_Some_Resource(argument 1, argument 2, etc.);
+		$some_var->VERB_some_resource(argument 1, argument 2, etc.);
 		var_dump($some_var->return);
 
 	} catch (exception $e) {
