@@ -887,7 +887,7 @@ class mailchimp {
 		return json_decode($this->return, false);
 	}
 
-	public function GET_list_members_collecton ($listid, $offset = 0, $count = 10) {
+	public function GET_list_members_collection ($listid, $offset = 0, $count = 10) {
 		
 		$ch = curl_init($this->url.'/lists/'.$listid.'/members/'.'?offset='.$offset.'&count='.$count);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
