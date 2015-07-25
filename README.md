@@ -18,3 +18,15 @@ This is an example of how to call a function
 	} catch (exception $e) {
 
 	} 
+
+##Note
+
+Each function now returns decoded json. However the non-decoded MailChimp response can still be found in the $response class property. If you would like to see decoded function return, then try:
+
+	try {
+
+		var-dump($some_var->VERB_some_resource(argument 1, argument 2, etc.));
+
+	} catch (exception $e) {
+
+	}

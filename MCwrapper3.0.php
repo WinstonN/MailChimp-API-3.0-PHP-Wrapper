@@ -3,11 +3,11 @@
 //ALL RESOURCES CAN BE FOUND UNDER THE 'mailchimp' CLASS. 
 //TO MAKE A CALL TO A RESOURCE YOU WILL WANT TO CALL A FUNCTION BEGGINNNING WITH THE HTTP METHOD FOLLOWED BY THE RESOURCE.
 //EXAMPLE: GET REQUEST TO LISTS COLLECTION ENDPOINT WOULD BE REFERENCED "GET_lists_collection"
-//RESPONSE WILL BE STORED IN CLASS PROPERTY: $return
+//RESPONSE WILL BE STORED IN CLASS PROPERTY: $response
 //APIKEY CAN BE FOUND/GENERATED IN YOUR MAILCHIMP ACCOUNT BY NAVIGATING ACCOUNT > EXTRAS > APIKEYS
 //PROVIDE THE ENTIRE APIKEY AS A STRING WHEN INSTANTIATING 'mailchimp' CLASS
 
-//SOME FUNCTIONS CAN USE THE $offset AND $count ARGUMENTS TO PAGINATE THE RETURN VALUES
+//SOME FUNCTIONS CAN USE THE $offset AND $count ARGUMENTS TO PAGINATE THE RESPONSE
 //FOR THESE FUNTCIONS NOT PROVIDING A VALUE FOR THESE ARGUMRNTS WILL RESULT IN THEM DEFAULTING to: "$offset=0" & "$count=10"
 
 //FOR ENDPOINTS THAT REQUIRE $member_id THE FUNCTION SHOULD PREP AND HASH THE $emailaddress FOR YOU
@@ -22,7 +22,7 @@ class mailchimp {
 	public $url;
 	public $exp_apikey;
 
-	public $return;
+	public $response;
 		
 	public function __construct ($apikey) {
 		$this->exp_apikey = explode('-', $apikey);
@@ -46,9 +46,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_authorized_apps_instance ($appid) {
@@ -57,9 +57,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 
@@ -74,9 +74,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_automations_emails_collection ($workflowid, $offset = 0, $count = 10) {
@@ -84,9 +84,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_automations_emails_instance ($workflowid, $emailid) {
@@ -94,9 +94,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}	
 
 	//Calling this function will pause an email in an automation workflow
@@ -107,9 +107,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//Calling this function will unpause an email in an automation workflow
@@ -120,9 +120,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_automations_emails_queue_collection ($workflowid, $emailid, $offset = 0, $count = 10) {
@@ -130,9 +130,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//$emailaddress is the email address (present on the list already) that you would like to queue to recieve the automation
@@ -149,9 +149,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//The member_id in the endpoint is MD5 hash of the lowercase email address
@@ -166,9 +166,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_automations_instance ($workflowid) {
@@ -176,9 +176,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 
@@ -194,9 +194,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch); 
-		return json_decode($this->return);
+		return json_decode($this->response);
 	}
 
 	public function GET_campaigns_feedback_collection ($campaignid) {
@@ -204,9 +204,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//$message is the string you would like to pass as a comment to a campaign
@@ -223,9 +223,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_campaigns_feedback_instance ($campaignid, $feedbackid) {
@@ -233,9 +233,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//$message is the string you would like to pass as a campaign comment
@@ -252,9 +252,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH" );
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//DELETE functionality for this endpoint not yet available as of 07-04-2015
@@ -265,9 +265,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE" );
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_campaigns_instance ($campaignid) {
@@ -275,9 +275,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 
@@ -287,9 +287,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE" );
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 
@@ -304,9 +304,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_conversations_instance ($conversationid) {
@@ -314,9 +314,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_conversations_messages_collection ($conversationid) {
@@ -324,9 +324,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	// This function creates a new entry in an existing conversation
@@ -344,9 +344,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_conversations_messages_instance ($conversationid, $messageid) {
@@ -354,9 +354,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 
@@ -372,9 +372,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	// $fileurl IS THE URL THE FILE YOU WOULD LIKE TO UPLOAD TO THE FILE MANAGER CAN BE FOUND AT
@@ -398,9 +398,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_file_manager_files_instance ($fileid) {
@@ -408,9 +408,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//CURRENTLY YOU CAN ONLY UPDATE WHAT FOLDER A FILE IS LOCATED IN
@@ -427,9 +427,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH" );
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function DELETE_file_manager_files_instance ($fileid) {
@@ -438,9 +438,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE" );
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_file_manager_folders_collection ($offset = 0, $count = 10) {
@@ -448,9 +448,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_file_manager_folders_instance ($folderid) {
@@ -458,9 +458,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function PATCH_file_manager_folders_instance ($folderid, $name) {
@@ -475,9 +475,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function DELETE_file_manager_folders_instance ($folderid) {
@@ -486,9 +486,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 
@@ -504,9 +504,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_list_abuse_instance ($listid, $reportid) {
@@ -515,9 +515,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_lists_activity_collection ($listid, $offset = 0, $count = 10) {
@@ -526,9 +526,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_lists_clients_collection ($listid) {
@@ -537,9 +537,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_lists_collection ($offset = 0, $count = 10) {
@@ -548,9 +548,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function POST_lists_collection ($name, 
@@ -603,9 +603,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 
 	}
 
@@ -615,9 +615,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//$month should be passed as a string formatted: "YYYY-MM"
@@ -628,9 +628,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_lists_instance ($listid) {
@@ -639,9 +639,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//PASS ANY FIELDS YOU DO NOT WISH TO UPDATE AS 'NULL'
@@ -742,9 +742,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH" );
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 
 	}
 
@@ -755,9 +755,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE" );
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_lists_interests_categories_collection ($listid,  $offset = 0, $count = 10) {
@@ -766,9 +766,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//$type can be "checkboxes", "radio", "hidden", or "dropdown"
@@ -784,9 +784,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 
 	}
 
@@ -796,9 +796,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_list_interests_collection ($listid, $category_id, $offset = 0, $count = 10) {
@@ -807,9 +807,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function POST_list_interests_collection ($listid, $category_id, $name) {
@@ -823,9 +823,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 
 	}
 
@@ -835,9 +835,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function PATCH_lists_interests_instance ($listid, $category_id, $interestid, $name) {
@@ -852,9 +852,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH" );
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 
 	}
 
@@ -865,9 +865,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE" );
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//The member_id in the endpoint is MD5 hash of email address
@@ -882,9 +882,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_list_members_collection ($listid, $offset = 0, $count = 10) {
@@ -893,9 +893,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 
 	}
 
@@ -933,9 +933,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 
 	}
 
@@ -950,9 +950,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//function will create $member_id from $emailaddress, pass $emailaddress as a string
@@ -966,9 +966,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//function will create $member_id from $emailaddress, pass $emailaddress as a string
@@ -998,9 +998,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 
 	}
 
@@ -1016,9 +1016,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//function will create $member_id from $emailaddress, pass $emailaddress as a string
@@ -1032,9 +1032,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//function will create $member_id from $emailaddress, pass $emailaddress as a string
@@ -1053,9 +1053,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 
 	}
 
@@ -1070,9 +1070,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//function will create $member_id from $emailaddress, pass $emailaddress as a string
@@ -1091,9 +1091,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 
 	}
 
@@ -1109,9 +1109,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE" );
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 
 	}
 
@@ -1121,9 +1121,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	// $listid, $name, & $type are required fields, others are optional.
@@ -1156,9 +1156,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_lists_merge_fields_instance ($listid, $mergeid) {
@@ -1167,9 +1167,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//$listid, $name, & $type are required fields, others are optional.
@@ -1211,9 +1211,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_lists_segments_collection ($listid, $offset = 0, $count = 10) {
@@ -1222,9 +1222,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//$type CAN BE 'static, saved, fuzzy'
@@ -1247,9 +1247,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_lists_segments_instance ($listid, $segmentid) {
@@ -1258,9 +1258,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 
@@ -1277,9 +1277,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_reports_abuse_instance ($campaignid, $abuseid) {
@@ -1288,9 +1288,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_reports_advice_collection ($campaignid) {
@@ -1299,9 +1299,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_reports_click_details_collection ($campaignid) {
@@ -1310,9 +1310,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_reports_click_details_instance ($campaignid, $linkid) {
@@ -1321,9 +1321,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_reports_click_details_members_collection ($campaignid, $urlid, $offset = 0, $count = 10) {
@@ -1331,9 +1331,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_reports_click_details_members_instance ($campaignid, $urlid, $emailid, $offset = 0, $count = 10) {
@@ -1341,9 +1341,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 
@@ -1354,9 +1354,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_reports_domain_performance_collection ($campaignid) {
@@ -1365,9 +1365,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_reports_email_activity_collection ($campaignid, $offset = 0, $count = 10) {
@@ -1376,9 +1376,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//Function will create $member_id from email address. Pass $emailaddress as a string.
@@ -1392,9 +1392,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_reports_instance ($campaignid) {
@@ -1403,9 +1403,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_reports_locations_collections ($campaignid) {
@@ -1414,9 +1414,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_reports_sent_to_collection ($campaignid, $offset = 0, $count = 10) {
@@ -1425,9 +1425,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//function will creat $member_id from email address. Pass email address as a string.
@@ -1441,9 +1441,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_reports_unsubscribes_collection ($campaignid, $offset = 0, $count = 10) {
@@ -1452,9 +1452,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//Function will create $member_id from email address. Pass email address as a string.
@@ -1468,9 +1468,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 
@@ -1487,9 +1487,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	public function GET_templates_instance ($templateid) {
@@ -1498,9 +1498,9 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//CURRENTLY NOT AVAILABLE - as of 07-04-2015
@@ -1517,9 +1517,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 	}
 
 	//CURRENTLY NOT AVAILABLE - as of 07-04-2015
@@ -1531,9 +1531,9 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-		$this->return = curl_exec($ch);
+		$this->response = curl_exec($ch);
 		curl_close($ch);
-		return json_decode($this->return, false);
+		return json_decode($this->response, false);
 
 	}
 
