@@ -1,21 +1,5 @@
 <?php
 
-//ALL RESOURCES CAN BE FOUND UNDER THE 'mailchimp' CLASS. 
-//TO MAKE A CALL TO A RESOURCE YOU WILL WANT TO CALL A FUNCTION BEGGINNNING WITH THE HTTP METHOD FOLLOWED BY THE RESOURCE.
-//EXAMPLE: GET REQUEST TO LISTS COLLECTION ENDPOINT WOULD BE REFERENCED "GET_lists_collection"
-//RESPONSE WILL BE STORED IN CLASS PROPERTY: $response
-//APIKEY CAN BE FOUND/GENERATED IN YOUR MAILCHIMP ACCOUNT BY NAVIGATING ACCOUNT > EXTRAS > APIKEYS
-//PROVIDE THE ENTIRE APIKEY AS A STRING WHEN INSTANTIATING 'mailchimp' CLASS
-
-//SOME FUNCTIONS CAN USE THE $offset AND $count ARGUMENTS TO PAGINATE THE RESPONSE
-//FOR THESE FUNTCIONS NOT PROVIDING A VALUE FOR THESE ARGUMRNTS WILL RESULT IN THEM DEFAULTING to: "$offset=0" & "$count=10"
-
-//FOR ENDPOINTS THAT REQUIRE $member_id THE FUNCTION SHOULD PREP AND HASH THE $emailaddress FOR YOU
-//EVEN IF IT CONTAINS UPPERCASE LETTERS
-//HOWEVER IT IS STILL BEST PRACTICE TO PASS THE ADDRESS AS A COMPLETELY LOWERCASE STRING
-
-//USE POST_pause_automated_email & POST_start_automated_email TO PAUSE AND START AUTOMATION EMAILS.
-
 class mailchimp {
 
 	public $auth;
@@ -35,14 +19,33 @@ class mailchimp {
 
 
 
+	//ACCOUNT --------------------------------------------------------------------------------------------------
+
+	public function GET_root () {
+		$ch = curl_init($this->url."/");
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
+
 
 
 
 	//AUTHORIZED APPS RESOURCES --------------------------------------------------------------------------------------------------------------------
 
-	public function GET_authorized_apps_collection ($offset = 0, $count = 10) {
 
-		$ch = curl_init($this->url.'/authorized-apps/'.'?offset='.$offset.'&count='.$count);
+	public function GET_authorized_apps_collection ($offset = 0, $count = 10, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/authorized-apps/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -69,8 +72,15 @@ class mailchimp {
 
 	//AUTOMATIONS RESOURCES ------------------------------------------------------------------------------------------------------------------------
 
-	public function GET_automations_collection ($offset = 0, $count = 10) {
-		$ch = curl_init($this->url.'/automations/'.'?offset='.$offset.'&count='.$count);
+	public function GET_automations_collection ($offset = 0, $count = 10, $filters = array()) {
+		
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/automations/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -79,8 +89,15 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_automations_emails_collection ($workflowid, $offset = 0, $count = 10) {
-		$ch = curl_init($this->url.'/automations/'.$workflowid.'/emails/'.'?offset='.$offset.'&count='.$count);
+	public function GET_automations_emails_collection ($workflowid, $offset = 0, $count = 10, $filters = array()) {
+		
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/automations/'.$workflowid.'/emails/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -125,8 +142,15 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_automations_emails_queue_collection ($workflowid, $emailid, $offset = 0, $count = 10) {
-		$ch = curl_init($this->url.'/automations/'.$workflowid.'/emails/'.$emailid.'/queue/'.'?offset='.$offset.'&count='.$count);
+	public function GET_automations_emails_queue_collection ($workflowid, $emailid, $offset = 0, $count = 10, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/automations/'.$workflowid.'/emails/'.$emailid.'/queue/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -135,7 +159,6 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	//$emailaddress is the email address (present on the list already) that you would like to queue to recieve the automation
 	
 	public function POST_automations_emails_queue_collection ($workflowid, $emailid, $emailaddress) {
 
@@ -153,9 +176,6 @@ class mailchimp {
 		curl_close($ch);
 		return json_decode($this->response, false);
 	}
-
-	//The member_id in the endpoint is MD5 hash of the lowercase email address
-	//Function will hash address for you, provide only address as a string for $emailaddress
 
 	public function GET_automations_emails_queue_instance ($workflowid, $emailid, $emailaddress) {
 
@@ -189,8 +209,15 @@ class mailchimp {
 
 	//CAMPAIGNS RESOURCES ----------------------------------------------------------------------------------------------------------------------------
 
-	public function GET_campaigns_collection ($offset = 0, $count = 10) {
-		$ch = curl_init($this->url.'/campaigns/'.'?offset='.$offset.'&count='.$count);
+	public function GET_campaigns_collection ($offset = 0, $count = 10, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/campaigns/'.'?offset='.$offset.'&count='.$count).$filter_string;
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -299,8 +326,15 @@ class mailchimp {
 
 	//CONVERSATIONS RESOURCES ----------------------------------------------------------------------------------------------------------------------
 
-	public function GET_conversations_collection ($offset = 0, $count = 10) {
-		$ch = curl_init($this->url.'/conversations/'.'?offset='.$offset.'&count='.$count);
+	public function GET_conversations_collection ($offset = 0, $count = 10, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/conversations/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -319,8 +353,15 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_conversations_messages_collection ($conversationid) {
-		$ch = curl_init($this->url.'/conversations/'.$conversationid.'/messages/');
+	public function GET_conversations_messages_collection ($conversationid, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/conversations/'.$conversationid.'/messages/'.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -367,8 +408,15 @@ class mailchimp {
 	//FILE MANAGER RESOURCES --------------------------------------------------------------------------------------------------------------
 
 
-	public function GET_file_manager_files_collection ($offset = 0, $count = 10) {
-		$ch = curl_init($this->url.'/file-manager/files/'.'?offset='.$offset.'&count='.$count);
+	public function GET_file_manager_files_collection ($offset = 0, $count = 10, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/file-manager/files/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -443,8 +491,15 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_file_manager_folders_collection ($offset = 0, $count = 10) {
-		$ch = curl_init($this->url.'/file-manager/folders/'.'?offset='.$offset.'&count='.$count);
+	public function GET_file_manager_folders_collection ($offset = 0, $count = 10, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/file-manager/folders/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -498,9 +553,15 @@ class mailchimp {
 
 	//LISTS RESOURCES -----------------------------------------------------------------------------------------------------------------------
 
-	public function GET_list_abuse_collection ($listid) {
-		
-		$ch = curl_init($this->url.'/lists/'.$listid.'/abuse-reports/');
+	public function GET_list_abuse_collection ($listid, $filters = array()) {
+	
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/lists/'.$listid.'/abuse-reports/'.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -520,9 +581,15 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_lists_activity_collection ($listid, $offset = 0, $count = 10) {
+	public function GET_lists_activity_collection ($listid, $offset = 0, $count = 10, $filters = array()) {
 		
-		$ch = curl_init($this->url.'/lists/'.$listid.'/activity/'.'?offset='.$offset.'&count='.$count);
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/lists/'.$listid.'/activity/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -542,9 +609,15 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_lists_collection ($offset = 0, $count = 10) {
+	public function GET_lists_collection ($offset = 0, $count = 10, $filters = array()) {
 		
-		$ch = curl_init($this->url.'/lists/'.'?offset='.$offset.'&count='.$count);
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/lists/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -555,18 +628,14 @@ class mailchimp {
 
 	public function POST_lists_collection ($name, 
 										   $reminder, 
-							  			   //$emailtype is boolean, still trying to figure out what it's value means lol
-							  			   $emailtype, 
+							  			   $emailtype, #bool
 							  			   $company, 
-							  			   //These address fields will be placed into an array together for encoding
 							  			   $address_street,
 							  			   $address_street2,
 							  			   $address_city,
 							  			   $address_state,
 							  			   $address_zip,
-							  			   //$country = 2 character ISO3166 code. Defaults to 'US'.
 							  			   $country,
-							  			   //These are your campaign defaults and will also be placed into an array for encoding
 							  			   $from_name,
 							               $from_email,
 							  			   $subject,
@@ -609,9 +678,15 @@ class mailchimp {
 
 	}
 
-	public function GET_lists_growth_history_collection ($listid) {
+	public function GET_lists_growth_history_collection ($listid, $filters = array()) {
 		
-		$ch = curl_init($this->url.'/lists/'.$listid.'/growth-history/');
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/lists/'.$listid.'/growth-history/'.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -644,24 +719,17 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	//PASS ANY FIELDS YOU DO NOT WISH TO UPDATE AS 'NULL'
-	//PASSING FIELDS WITH EMPTY VALUES OR EMPTY STRINGS MAY RESULT IN OVERWRITING LIST DATA
-
 	public function PATCH_lists_instance  ($listid, 
 							   			   $name, 
 							   			   $reminder, 
-							   			   //$emailtype is boolean, still trying to figure out what it's value means lol
 							   			   $emailtype, 
-							   			   $company, 
-							     		   //These address fields will be placed into an array together for encoding
+							   			   $company, #bool
 							    		   $address_street,
 							   		   	   $address_street2,
 							    		   $address_city,
 							   			   $address_state,
 							   			   $address_zip,
-							  			   //$country = 2 character ISO3166 code. Defaults to 'US'.
 							  			   $country,
-							 		       //These are your campaign defaults and will also be placed into an array for encoding
 							 			   $from_name,
 							  			   $from_email,
 							  			   $subject,
@@ -760,9 +828,15 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_lists_interests_categories_collection ($listid,  $offset = 0, $count = 10) {
+	public function GET_lists_interests_categories_collection ($listid,  $offset = 0, $count = 10, $filters = array()) {
 		
-		$ch = curl_init($this->url.'/lists/'.$listid.'/interest-categories/'.'?offset='.$offset.'&count='.$count);
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/lists/'.$listid.'/interest-categories/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -801,9 +875,15 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_list_interests_collection ($listid, $category_id, $offset = 0, $count = 10) {
+	public function GET_list_interests_collection ($listid, $category_id, $offset = 0, $count = 10, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
 		
-		$ch = curl_init($this->url.'/lists/'.$listid.'/interest-categories/'.$category_id.'/interests'.'?offset='.$offset.'&count='.$count);
+		$ch = curl_init($this->url.'/lists/'.$listid.'/interest-categories/'.$category_id.'/interests'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -870,9 +950,6 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	//The member_id in the endpoint is MD5 hash of email address
-	//Function will hash address for you, provide only address as a string for $emailaddress
-
 	public function GET_lists_members_activity_collection ($listid, $emailaddress) {
 
 		$hashprep = strtolower($emailaddress);
@@ -887,9 +964,15 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_list_members_collection ($listid, $offset = 0, $count = 10) {
+	public function GET_list_members_collection ($listid, $offset = 0, $count = 10, $filters = array()) {
 		
-		$ch = curl_init($this->url.'/lists/'.$listid.'/members/'.'?offset='.$offset.'&count='.$count);
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/lists/'.$listid.'/members/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -911,7 +994,7 @@ class mailchimp {
 	//please read schema for expected merge fields
 	//https://us9.api.mailchimp.com/schema/3.0/Lists/Members/Instance.json?_ga=1.91680986.1112410188.1433351910
 
-	public function POST_list_members_collecton ($listid, $emailaddress, $status, $mergefields, $interests) {
+	public function POST_list_members_collection ($listid, $emailaddress, $status, $mergefields, $interests) {
 
 		$params = array('email_address' => $emailaddress,
 						'status' => $status,
@@ -939,7 +1022,6 @@ class mailchimp {
 
 	}
 
-	//function will create $member_id from $emailaddress, pass $emailaddress as a string
 
 	public function GET_lists_members_goals_collection ($listid, $emailaddress) {
 
@@ -955,7 +1037,6 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	//function will create $member_id from $emailaddress, pass $emailaddress as a string
 
 	public function GET_list_members_instance ($listid, $emailaddress) {
 
@@ -971,9 +1052,8 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	//function will create $member_id from $emailaddress, pass $emailaddress as a string
 
-	public function PATCH_lists_members_instance ($listid, $emailaddress, $status, $mergefields, $interests) {
+	public function PATCH_list_members_instance ($listid, $emailaddress, $status, $mergefields, $interests) {
 
 		$hashprep = strtolower($emailaddress);
 		$member_id = md5($hashprep);
@@ -1004,7 +1084,6 @@ class mailchimp {
 
 	}
 
-	//function will create $member_id from $emailaddress, pass $emailaddress as a string
 
 	public function DELETE_list_members_instance ($listid, $emailaddress) {
 
@@ -1021,7 +1100,6 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	//function will create $member_id from $emailaddress, pass $emailaddress as a string
 
 	public function GET_lists_members_notes_collection ($listid, $emailaddress) {
 
@@ -1037,7 +1115,6 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	//function will create $member_id from $emailaddress, pass $emailaddress as a string
 
 	public function POST_lists_members_notes_collection ($listid, $emailaddress, $note) {
 
@@ -1059,7 +1136,6 @@ class mailchimp {
 
 	}
 
-	//function will create $member_id from $emailaddress, pass $emailaddress as a string
 
 	public function GET_lists_members_notes_instance ($listid, $emailaddress, $noteid) {
 
@@ -1075,7 +1151,6 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	//function will create $member_id from $emailaddress, pass $emailaddress as a string
 
 	public function PATCH_lists_members_notes_instance ($listid, $emailaddress, $noteid, $note) {
 
@@ -1097,7 +1172,6 @@ class mailchimp {
 
 	}
 
-	//function will create $member_id from $emailaddress, pass $emailaddress as a string
 
 	public function DELETE_lists_members_notes_instance ($listid, $emailaddress, $noteid) {
 
@@ -1115,9 +1189,15 @@ class mailchimp {
 
 	}
 
-	public function GET_lists_merge_fields_collection ($listid, $offset = 0, $count = 10) {
+	public function GET_lists_merge_fields_collection ($listid, $offset = 0, $count = 10, $filters = array()) {
 		
-		$ch = curl_init($this->url.'/lists/'.$listid.'/merge-fields/'.'?offset='.$offset.'&count='.$count);
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/lists/'.$listid.'/merge-fields/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1127,7 +1207,6 @@ class mailchimp {
 	}
 
 	// $listid, $name, & $type are required fields, others are optional.
-	// If you are not passing any value then pass as NULL
 	// pass $required & $visible as boolean
 	// SCHEMA DESCRIBES $type AS STRING
 	// $types array('text','number','address','phone','email','date','url','imageurl','radio','dropdown','checkboxes','birthday','zip');
@@ -1216,9 +1295,28 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_lists_segments_collection ($listid, $offset = 0, $count = 10) {
+	public function DELETE_lists_merge_field_instance ($listid, $mergeid) {
+
+		$ch = curl_init($this->url.'/lists/'.$listid.'/merge-fields/'.$mergeid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE" );
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function GET_lists_segments_collection ($listid, $offset = 0, $count = 10, $filters = array()) {
 		
-		$ch = curl_init($this->url.'/lists/'.$listid.'/segments/'.'?offset='.$offset.'&count='.$count);
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/lists/'.$listid.'/segments/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1271,9 +1369,15 @@ class mailchimp {
 
 	//REPORTS RESOURCES ---------------------------------------------------------------------------------------------------------------
 
-	public function GET_reports_abuse_collection ($campaignid) {
+	public function GET_reports_abuse_collection ($campaignid, $filters = array()) {
 		
-		$ch = curl_init($this->url.'/reports/'.$campaignid.'/abuse-reports/');
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/reports/'.$campaignid.'/abuse-reports/'.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1304,9 +1408,15 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_reports_click_details_collection ($campaignid) {
+	public function GET_reports_click_details_collection ($campaignid, $filters = array()) {
 		
-		$ch = curl_init($this->url.'/reports/'.$campaignid.'/click-details/');
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/reports/'.$campaignid.'/click-details/'.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1326,8 +1436,15 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_reports_click_details_members_collection ($campaignid, $urlid, $offset = 0, $count = 10) {
-		$ch = curl_init($this->url.'/reports/'.$campaignid.'/click-details/'.$urlid.'/members/'.'?offset='.$offset.'&count='.$count);
+	public function GET_reports_click_details_members_collection ($campaignid, $urlid, $offset = 0, $count = 10, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/reports/'.$campaignid.'/click-details/'.$urlid.'/members/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1346,11 +1463,15 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-
-
-	public function GET_reports_collection ($offset = 0, $count = 10) {
+	public function GET_reports_collection ($offset = 0, $count = 10, $filters = array()) {
 		
-		$ch = curl_init($this->url.'/reports/'.'?offset='.$offset.'&count='.$count);
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/reports/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1370,9 +1491,15 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_reports_email_activity_collection ($campaignid, $offset = 0, $count = 10) {
+	public function GET_reports_email_activity_collection ($campaignid, $offset = 0, $count = 10, $filters = array()) {
 		
-		$ch = curl_init($this->url.'/reports/'.$campaignid.'/email-activity/'.'?offset='.$offset.'&count='.$count);
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/reports/'.$campaignid.'/email-activity/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1380,8 +1507,6 @@ class mailchimp {
 		curl_close($ch);
 		return json_decode($this->response, false);
 	}
-
-	//Function will create $member_id from email address. Pass $emailaddress as a string.
 
 	public function GET_reports_email_activity_instance ($campaignid, $emailaddress) {
 		
@@ -1419,9 +1544,15 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_reports_sent_to_collection ($campaignid, $offset = 0, $count = 10) {
+	public function GET_reports_sent_to_collection ($campaignid, $offset = 0, $count = 10, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
 		
-		$ch = curl_init($this->url.'/reports/'.$campaignid.'/sent-to/'.'?offset='.$offset.'&count='.$count);
+		$ch = curl_init($this->url.'/reports/'.$campaignid.'/sent-to/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1429,8 +1560,6 @@ class mailchimp {
 		curl_close($ch);
 		return json_decode($this->response, false);
 	}
-
-	//function will creat $member_id from email address. Pass email address as a string.
 
 	public function GET_reports_sent_to_instance ($campaignid, $emailaddress) {
 		
@@ -1446,9 +1575,15 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_reports_unsubscribes_collection ($campaignid, $offset = 0, $count = 10) {
+	public function GET_reports_unsubscribes_collection ($campaignid, $offset = 0, $count = 10, $filters = array()) {
 		
-		$ch = curl_init($this->url.'/reports/'.$campaignid.'/unsubscribed/'.'?offset='.$offset.'&count='.$count);
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/reports/'.$campaignid.'/unsubscribed/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1456,8 +1591,6 @@ class mailchimp {
 		curl_close($ch);
 		return json_decode($this->response, false);
 	}
-
-	//Function will create $member_id from email address. Pass email address as a string.
 
 	public function GET_reports_unsubscribes_instance ($campaignid, $emailaddress) {
 		
@@ -1481,9 +1614,15 @@ class mailchimp {
 
 	//TEMPLATES RESOURCES -----------------------------------------------------------------------------------------------------------------------
 
-	public function GET_templates_collection ($offset = 0, $count = 10) {
+	public function GET_templates_collection ($offset = 0, $count = 10, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
 		
-		$ch = curl_init($this->url.'/templates/'.'?offset='.$offset.'&count='.$count);
+		$ch = curl_init($this->url.'/templates/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
