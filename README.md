@@ -37,9 +37,9 @@ Some functions can paginate their returns using the $offset and $count arguments
 
 ##Notes
 
-- Functions with endpoints that rquire a member_id use the $email_address argument to generate this ID, by generating an MD5 hash of the lowercase email address. All that is needed is to pass the email address as a string.
+- Functions with endpoints that rquire a member_id use the $email_address argument to generate this ID, by creating an MD5 hash of the lowercase email address. All that is needed is to pass the email address as a string.
 
-- If you do not wish to update a field while PATCHING pass it's argument as (null). 
+- If you do not wish to update a field while PATCHing pass it's argument as (null). 
 
 
 
