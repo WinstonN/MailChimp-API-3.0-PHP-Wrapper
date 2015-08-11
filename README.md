@@ -37,9 +37,9 @@ Some functions can paginate their returns using the $offset and $count arguments
 
 ##Filters
 
-Some functions can have their return values filtered. The endpoints that support filters and their associated filter parameters can be found in filters.txt. The filter parameters have been included as arguments for each function and should be passed as an associative array (see below).
+Some functions can have their return values filtered. The endpoints that support filters and their associated filter parameters can be found in filters.txt. The filter parameters have been included as arguments for each function and should be passed as an associative array (see below). Functions will urlencode filter values before amending request URL.
 
-	array('filter_key'=>'filter_value')
+	array('filter_key'=>'filter_value');
 
 ##Notes
 
