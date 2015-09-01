@@ -10,7 +10,7 @@ class mailchimp {
 		
 	public function __construct ($apikey) {
 		$this->exp_apikey = explode('-', $apikey);
-		$this->auth = array('Authorization: aipkey '.$this->exp_apikey[0].'-'.$this->exp_apikey[1]); 
+		$this->auth = array('Authorization: apikey '.$this->exp_apikey[0].'-'.$this->exp_apikey[1]); 
 	    $this->url = "Https://".$this->exp_apikey[1].".api.mailchimp.com/3.0";
 	    return $this->auth;
 	    return $this->url;
@@ -19,7 +19,7 @@ class mailchimp {
 
 
 
-	//ACCOUNT --------------------------------------------------------------------------------------------------
+	//ACCOUNT --------------------------------------------------------------------------------------------------------------------------------------
 
 	public function GET_root () {
 		$ch = curl_init($this->url."/");
@@ -217,7 +217,7 @@ class mailchimp {
 			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
 		}
 
-		$ch = curl_init($this->url.'/campaigns/'.'?offset='.$offset.'&count='.$count).$filter_string;
+		$ch = curl_init($this->url.'/campaigns/'.'?offset='.$offset.'&count='.$count.$filter_string);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -637,7 +637,7 @@ class mailchimp {
 							  			   $address_zip,
 							  			   $country,
 							  			   $from_name,
-							               $from_email,
+										   $from_email,
 							  			   $subject,
 							  			   $language
 							  			   )	
@@ -724,16 +724,16 @@ class mailchimp {
 							   			   $reminder, 
 							   			   $emailtype, 
 							   			   $company, #bool
-							    		   $address_street,
+										   $address_street,
 							   		   	   $address_street2,
-							    		   $address_city,
+										   $address_city,
 							   			   $address_state,
 							   			   $address_zip,
 							  			   $country,
 							 			   $from_name,
 							  			   $from_email,
 							  			   $subject,
-							     		   $language) 
+										   $language) 
 	
 
 	{
@@ -1329,7 +1329,7 @@ class mailchimp {
 	//$conditions is expecting the "options" object described here: https://us9.api.mailchimp.com/schema/3.0/Lists/Segments/Instance.json
 	//Pass as NULL if not passing any value
 
-	public function POST_lists_segments_collection ($listid, $name, $type, $conditions) {
+	public function POST_lists_segments_collection ($listid, $name, $type, $conditions = array()) {
 		
 		$params = array('name'=>$name,'type'=>$type);
 
