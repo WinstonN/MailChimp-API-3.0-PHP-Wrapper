@@ -65,7 +65,25 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
+	public function POST_authorized_apps_collection ($client_id, $client_sec) {
 
+		$params = array(
+						'client_id' => $client_id , 
+						'client_secret' => $client_sec
+						);
+
+		$payload = json_encode($params);
+		
+		$ch = curl_init($this->url.'/authorized-apps/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
 
 
 
@@ -201,11 +219,147 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
+	public function GET_automations_workflow_removed_subscribers ($workflowid) {
+		$ch = curl_init($this->url.'/automations/'.$workflowid.'/removed-subscribers/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function POST_automations_workflow_removed_subscribers ($workflowid, $emailaddress) {
+
+		$params = array('email_address' => $emailaddress);
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/automations/'.$workflowid.'/removed-subscribers/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
 
 
 
+	//BATCH OPERATIONS RESOURCES ---------------------------------------------------------------------------------------------------------------------
 
+	public function POST_batches_collection ($operations = array()) {
+
+		$params = array('operations' => $operations);
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/batches/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
+
+	public function GET_batches_collection () {
+		$ch = curl_init($this->url.'/batches/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
+
+	public function GET_batches_instance ($batchid) {
+		$ch = curl_init($this->url.'/batches/'.$batchid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
 	
+
+
+
+	//CAMPAIGNS FOLDERS RESOURCES --------------------------------------------------------------------------------------------------------------------
+
+	public function POST_camapigns_folders_collection ($foldername) {
+
+		$params = array('name'=> $foldername);
+
+		$payload -json_encode($params);
+
+		$ch = curl_init($this->url.'campaign-folders');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
+
+	public function GET_campaigns_folders_collection () {
+		$ch = curl_init($this->url.'/camapigns-folders/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
+
+	public function GET_campaigns_folders_instance ($folderid) {
+		$ch = curl_init($this->url.'/camapigns-folders/'.$folderid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
+
+	public function PATCH_campaigns_folders_instance ($folderid, $foldername) {
+
+		$params = array('name' => $foldername);
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/camapigns-folders/'.$folderid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
+
+	public function DELETE_campaigns_folders_instance ($folderid) {
+		$ch = curl_init($this->url.'/camapigns-folders/'.$folderid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE" );
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
+
+
+
 
 	//CAMPAIGNS RESOURCES ----------------------------------------------------------------------------------------------------------------------------
 
@@ -225,6 +379,57 @@ class mailchimp {
 		curl_close($ch); 
 		return json_decode($this->response);
 	}
+
+	public function POST_campaigns_collection ($type, 
+											   $recipients = array(), 
+											   $settings = array(), 
+											   $variate_settings = NULL, 
+											   $tracking = NULL,
+											   $rss_opts = NULL,
+											   $ab_split_opts = NULL,
+											   $social_card = NULL,
+											   $report_summary = NULL,
+											   $delivery_status = NULL
+											   ) {
+		$params = array('type'=>$type,
+						'recipients'=>$recipients,
+						'settings'=>$settings);
+
+		if (!is_null($variate_settings)) {
+			$params['variate_settings'] = $variate_settings;
+		} 
+		if (!is_null($tracking)) {
+			$params['tracking'] = $tracking;
+		}
+		if (!is_null($rss_opts)) {
+			$param['rss_opts'] = $rss_opts;
+		}
+		if (!is_null($ab_split_opts)) {
+			$params['ab_split_opts'] = $ab_split_opts;
+		}
+		if (!is_null($social_card)) {
+			$params['social_card'] = $social_card;
+		}
+		if (!is_null($report_summary)) {
+			$params['report_summary'] = $report_summary;
+		}
+		if (!is_null($delivery_status)) {
+			$params['delivery_status'] = $delivery_status;
+		}
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/campaigns/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
+
 
 	public function GET_campaigns_feedback_collection ($campaignid) {
 		$ch = curl_init($this->url.'/campaigns/'.$campaignid.'/feedback/');
@@ -277,7 +482,7 @@ class mailchimp {
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH" );
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
 		$this->response = curl_exec($ch);
 		curl_close($ch);
@@ -307,6 +512,57 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
+	public function PATCH_campaigns_instance ($campaignid,
+											  $type, 
+											  $recipients = array(), 
+											  $settings = array(), 
+											  $variate_settings = NULL, 
+											  $tracking = NULL,
+											  $rss_opts = NULL,
+											  $ab_split_opts = NULL,
+											  $social_card = NULL,
+											  $report_summary = NULL,
+											  $delivery_status = NULL
+											  ) {
+
+		$params = array('type'=>$type,
+						'recipients'=>$recipients,
+						'settings'=>$settings);
+
+		if (!is_null($variate_settings)) {
+			$params['variate_settings'] = $variate_settings;
+		} 
+		if (!is_null($tracking)) {
+			$params['tracking'] = $tracking;
+		}
+		if (!is_null($rss_opts)) {
+			$param['rss_opts'] = $rss_opts;
+		}
+		if (!is_null($ab_split_opts)) {
+			$params['ab_split_opts'] = $ab_split_opts;
+		}
+		if (!is_null($social_card)) {
+			$params['social_card'] = $social_card;
+		}
+		if (!is_null($report_summary)) {
+			$params['report_summary'] = $report_summary;
+		}
+		if (!is_null($delivery_status)) {
+			$params['delivery_status'] = $delivery_status;
+		}
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/campaigns/'.$campaignid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
 
 	public function DELETE_campaigns_instance ($campaignid) {
 		$ch = curl_init($this->url.'/campaigns/'.$campaignid);
@@ -319,8 +575,91 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
+	public function POST_campaign_send ($campaignid) {
+		$ch = curl_init($this->url.'/campaigns/'.$campaignid.'/actions/send/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
 
+	public function POST_campaign_cancel_send ($campaignid) {
+		$ch = curl_init($this->url.'/campaigns/'.$campaignid.'/actions/cancel-send/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
 
+	public function GET_campaign_content ($campaignid) {
+		$ch = curl_init($this->url.'/campaigns/'.$campaignid.'/content/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}	
+
+	public function PUT_campaign_content ($campaignid,
+										  $plain_text = NULL, 
+										  $html = NULL,
+										  $url = NULL,
+										  $template = NULL,
+										  $archive = NULL,
+										  $variate_contents = NULL
+										  ) {
+
+		$params = array();
+
+		if (!is_null($plain_text)) {
+			$params['plain_text'] = $plain_text;
+		}
+		if (!is_null($html)) {
+			$params['html'] = $html;
+		}
+		if (!is_null($url)) {
+			$params['url'] = $url;
+		}
+		if (!is_null($template)) {
+			$params['template'] = $template;
+		}
+		if (!is_null($archive)) {
+			$params['archive'] = $archive;
+		}
+		if (!is_null($variate_contents)) {
+			$params['variate_contents'] = $variate_contents;
+		}
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/campaigns/'.$campaignid.'/content/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function GET_send_checklist ($campaignid) {
+		$ch = curl_init($this->url.'/campaigns/'.$campaignid.'/send-checklist/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
 
 
 
@@ -982,30 +1321,38 @@ class mailchimp {
 
 	}
 
-	//	******************** PLEASE READ FOR POSTING TO THIS ENDPOINT ********************************
-
-
-	//$mergefields and $interests are both expecting objects
-	//If you do not wish to pass one of these pass as NULL
-	//the key to each of the $interests object's properties is the interest id
-	//these key's values are either true or false
-	//so $interest = array('interest_id' => true/false)
-
-	//please read schema for expected merge fields
-	//https://us9.api.mailchimp.com/schema/3.0/Lists/Members/Instance.json?_ga=1.91680986.1112410188.1433351910
-
-	public function POST_list_members_collection ($listid, $emailaddress, $status, $mergefields, $interests) {
+	public function POST_list_members_collection ($listid, 
+												  $emailaddress, 
+												  $status, 
+												  $email_type = NULL,
+												  $merge_fields = NULL,
+												  $interests = NULL,
+												  $language = NULL,
+												  $vip = NULL,
+												  $location = NULL 
+												  ) {
 
 		$params = array('email_address' => $emailaddress,
 						'status' => $status,
 						);
 
-		if (!is_null($mergefields)) {
-			$params['merge_fields'] = $mergefields;
+		if (!is_null($email_type)) {
+			$params['email_type'] = $email_type;
 		}
-
+		if (!is_null($merge_fields)) {
+			$params['merge_fields'] = $merge_fields;
+		}
 		if (!is_null($interests)) {
 			$params['interests'] = $interests;
+		}
+		if (!is_null($language)) {
+			$params['language'] = $language;
+		}
+		if (!is_null($vip)) {
+			$params['vip'] = $vip;
+		}
+		if (!is_null($location)) {
+			$params['location'] = $location;
 		}
 
 
@@ -1019,7 +1366,6 @@ class mailchimp {
 		$this->response = curl_exec($ch);
 		curl_close($ch);
 		return json_decode($this->response, false);
-
 	}
 
 
@@ -1053,21 +1399,42 @@ class mailchimp {
 	}
 
 
-	public function PATCH_list_members_instance ($listid, $emailaddress, $status, $mergefields, $interests) {
+	public function PATCH_list_members_instance ($listid, 
+												 $emailaddress, 
+												 $status = NULL, 
+												 $email_type = NULL,
+												 $merge_fields = NULL,
+												 $interests = NULL,
+												 $language = NULL,
+												 $vip = NULL,
+												 $location = NULL
+												 ) {
 
 		$hashprep = strtolower($emailaddress);
 		$member_id = md5($hashprep);
 
-		$params = array('email_address' => $emailaddress,
-						'status' => $status,
-						);
+		$params = array('email_address' => $emailaddress);
 
-		if (!is_null($mergefields)) {
-			$params['merge_fields'] = $mergefields;
+		if (!is_null($status)) {
+			$params['status'] = $status;
 		}
-
+		if (!is_null($email_type)) {
+			$params['email_type'] = $email_type;
+		}
+		if (!is_null($merge_fields)) {
+			$params['merge_fields'] = $merge_fields;
+		}
 		if (!is_null($interests)) {
 			$params['interests'] = $interests;
+		}
+		if (!is_null($language)) {
+			$params['language'] = $language;
+		}
+		if (!is_null($vip)) {
+			$params['vip'] = $vip;
+		}
+		if (!is_null($location)) {
+			$params['location'] = $location;
 		}
 
 
@@ -1077,6 +1444,61 @@ class mailchimp {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function PUT_list_members_instance ($listid, 
+											   $emailaddress, 
+											   $status, 
+											   $email_type = NULL,
+											   $merge_fields = NULL,
+											   $interests = NULL,
+											   $language = NULL,
+											   $vip = NULL,
+											   $location = NULL,
+											   $status_if_new = NULL
+											   ) {
+
+		$hashprep = strtolower($emailaddress);
+		$member_id = md5($hashprep);
+
+		$params = array('email_address' => $emailaddress,
+						'status' => $status
+						);
+
+		if (!is_null($email_type)) {
+			$params['email_type'] = $email_type;
+		}
+		if (!is_null($merge_fields)) {
+			$params['merge_fields'] = $merge_fields;
+		}
+		if (!is_null($interests)) {
+			$params['interests'] = $interests;
+		}
+		if (!is_null($language)) {
+			$params['language'] = $language;
+		}
+		if (!is_null($vip)) {
+			$params['vip'] = $vip;
+		}
+		if (!is_null($location)) {
+			$params['location'] = $location;
+		}
+		if (!is_null($status_if_new)) {
+			$params['status_if_new']= $status_if_new;
+		}
+
+
+		$payload = json_encode($params);
+
+		$ch= curl_init($this->url.'/lists/'.$listid.'/members/'.$member_id);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
 		$this->response = curl_exec($ch);
 		curl_close($ch);
@@ -1329,9 +1751,9 @@ class mailchimp {
 	//$conditions is expecting the "options" object described here: https://us9.api.mailchimp.com/schema/3.0/Lists/Segments/Instance.json
 	//Pass as NULL if not passing any value
 
-	public function POST_lists_segments_collection ($listid, $name, $type, $conditions = array()) {
+	public function POST_lists_segments_collection ($listid, $name, $conditions = array()) {
 		
-		$params = array('name'=>$name,'type'=>$type);
+		$params = array('name'=>$name);
 
 		if (!is_null($conditions)) {
 			$params['options'] = $conditions;
@@ -1361,7 +1783,37 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
+	public function PATCH_lists_segments_instance ($listid, $segmentid, $name, $conditions = NULL) {
+		
+		$params = array('name'=>$name);
 
+		if (!is_null($conditions)) {
+			$params['options'] = $conditions;
+		}
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/lists/'.$listid.'/segments/'.$segmentid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
+
+	public function DELETE_lists_segments_instance ($listid, $segmentid) {
+		$ch = curl_init($this->url.'/lists/'.$listid.'/segments/'.$segmentid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE" );
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);		
+	}
 
 
 
@@ -1606,11 +2058,92 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
+	public function GET_reports_eepurl ($campaignid) {
+		$ch = curl_init($this->url.'/reports/'.$campaignid.'/eepurl/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
 
+	public function GET_reports_campaign_sub_reports ($campaignid) {
+		$ch = curl_init($this->url.'/reports/'.$campaignid.'/sub-reports/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
 
+	//TEMPLATE FOLDERS RESOURCES ----------------------------------------------------------------------------------------------------------------
 
+	public function GET_template_folders_collection () {
+		$ch = curl_init($this->url.'/template-folders/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
 
+	public function POST_template_folders_collection ($foldername) {
 
+		$params = array('name' => $foldername);
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/template-folders/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);		
+	}
+
+	public function GET_template_folders_instance ($folderid) {
+		$ch = curl_init($this->url.'/template-folders/'.$folderid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
+
+	public function PATCH_template_folders_instance ($folderid, $foldername) {
+
+		$params = array('name' => $foldername);
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/template-folders/'.$folderid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);		
+	}
+
+	public function DELETE_template_folders_instance ($folderid) {
+		$ch = curl_init($this->url.'/template-folders/'.$folderid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE" );
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
 
 	//TEMPLATES RESOURCES -----------------------------------------------------------------------------------------------------------------------
 
@@ -1673,9 +2206,18 @@ class mailchimp {
 		$this->response = curl_exec($ch);
 		curl_close($ch);
 		return json_decode($this->response, false);
-
 	}
 
+	public function GET_template_instance_default_content ($templateid) {
+		$ch = curl_init($this->url.'/templates/'.$templateid.'/default-content/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
 }
 
 /* 
