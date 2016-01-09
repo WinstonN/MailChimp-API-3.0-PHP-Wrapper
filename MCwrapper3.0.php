@@ -1747,10 +1747,6 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	//$type CAN BE 'static, saved, fuzzy'
-	//$conditions is expecting the "options" object described here: https://us9.api.mailchimp.com/schema/3.0/Lists/Segments/Instance.json
-	//Pass as NULL if not passing any value
-
 	public function POST_lists_segments_collection ($listid, $name, $conditions = array()) {
 		
 		$params = array('name'=>$name);
