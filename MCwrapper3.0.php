@@ -661,6 +661,38 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
+	public function campaigns_pause($campaignid) {
+		$ch = curl_init($this->url.'/campaigns/'.$campaignid.'/actions/pause');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
+
+	public function campaigns_resume($campaignid) {
+		$ch = curl_init($this->url.'/campaigns/'.$campaignid.'/actions/resume');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
+
+	public function campaigns_replicate($campaignid) {
+		$ch = curl_init($this->url.'/campaigns/'.$campaignid.'/actions/replicate');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
 
 
 	//CONVERSATIONS RESOURCES ----------------------------------------------------------------------------------------------------------------------
@@ -740,8 +772,605 @@ class mailchimp {
 	}
 
 
+	//ECOMMERCE ENDPOINTS -----------------------------------------------------------------------------------------------------------------
+
+	public function GET_ecommerce_stores_collection ($offset = 0, $count = 10, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.'?offset='.$offset.'&count='.$count.$filter_string);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function GET_ecommerce_stores_instance ($storeid) {
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function POST_ecommerce_stores_collection ($storeid, $listid, $name, $currencycode, $optional_parameters = array()) {
+
+		$required_params = array('id' => $storeid ,
+						'list_id' => $listid,
+						'name' => $name,
+						'currency_code' => $currencycode
+						);
+
+		$params = array_merge($required_params, $optional_parameters);
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/ecommerce/stores/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
 
 
+	}
+
+	public function PATCH_ecommerce_stores_instance ($storeid, $update_params = array()) {
+
+	 	$params =  $update_params;
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function DELETE_ecommerce_stores_instance ($storeid) {
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function POST_ecommerce_carts_collection ($storid, $cartid, $customer = array(), $currency_code, $order_total, $lines, $optional_parameters = array()) {
+
+		$params = array("id" => $cartid,
+						"customer" => $customer,
+						"currency_code" => $currency_code,
+						"order_total" => $order_total,
+						"lines" => $lines);
+
+		$params = array_merge($params, $optional_parameters);
+
+		$payload =json_encode($params);
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/carts/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+
+	}
+
+	public function GET_ecommerce_carts_collection ($storeid, $offset = 0, $count = 10, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/carts/?offset='.$offset.'&count='.$count.$filter_string);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+
+	}
+
+	public function GET_ecommerce_carts_instance ($storeid, $cartid) {
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/carts/'.$cartid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function DELETE_ecommerce_carts_instance ($storeid, $cartid) {
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/carts/'.$cartid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function POST_ecommerce_customers_collection ($storeid, $customerid, $customer_email, $opt_in_status, $optional_parameters= array()) {
+
+		$params = array("id"=>$customerid,
+						"emaail_address"=>$customer_email,
+						"opt_in_status"=>$opt_in_status
+						);
+
+		$params = array_merge($params, $optional_parameters);
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/customers/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function GET_ecommerce_customers_collection ($storeid, $offset = 0, $count = 10, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/customers/?offset='.$offset.'&count='.$count.$filter_string);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function GET_ecommerce_customers_instance ($storeid, $customerid) {
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/customers/'.$customerid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function PATCH_ecommerce_customer_instance ($storeid, $customerid, $patch_parameters = array()) {
+
+		$payload = json_encode($patch_parameters);
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/customers/'.$customerid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function PUT_ecommerce_customer_instance ($storeid, $customerid, $customer_email, $opt_in_status, $optional_parameters = array()) {
+
+		$params = array("id"=>$customerid,
+						"email_address"=>$customer_email,
+						"opt_in_status"=>$opt_in_status
+						);
+
+		$params = array_merge($params, $optional_parameters);
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/customers/'.$customerid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function DELETE_ecommerce_customer_instance ($storeid, $customerid) {
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/customers/'.$customerid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function POST_ecommerce_orders_collection ($storeid, $orderid, $customer = array(), $currency_code, $order_total, $lines, $optional_parameters = array()) {
+
+		$params = array("id"=>$orderid,
+						"customer"=>$customer,
+						"currency_code"=>$currency_code,
+						"order_total"=>$order_total,
+						"lines"=>$lines
+						);
+
+		$params = array_merge($params, $optional_parameters);
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/orders/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function GET_ecommerce_orders_collection ($storeid, $offset = 0, $count = 10, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/orders/?offset='.$offset.'&count='.$count.$filter_string);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function GET_ecommerce_order_instance ($storeid, $orderid) {
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/orders/'.$orderid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function PATCH_ecommerce_order_instance ($storeid, $orderid, $patch_parameters = array()) {
+
+		$payload = json_encode($patch_parameters);
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/orders/'.$orderid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function DELETE_ecommerce_order_instance ($storeid, $orderid) {
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/orders/'.$orderid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function POST_ecommerce_order_lines_collection ($storeid, $orderid, $lineid, $productid, $product_varientid, $quantity, $price) {
+
+		$params = array("id"=>$lineid,
+						"product_id"=>$productid,
+						"product_variant_id"=>$product_varientid,
+						"quantity"=>$quantity,
+						"price"=>$price
+						);
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/orders/'.$orderid.'/lines/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function GET_ecommerce_order_lines_collection ($storeid, $orderid, $offset = 0, $count = 10, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/orders/'.$orderid.'/lines/?offset='.$offset.'&count='.$count.$filter_string);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+
+	}
+
+	public function GET_ecommerce_order_lines_instance ($storeid, $orderid, $lineid) {
+
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/orders/'.$orderid.'/lines/'.$lineid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+
+	}
+
+	public function PATCH_ecommerce_order_line_instance ($storeid, $orderid, $lineid, $patch_parameters = array()) {
+
+		$payload = json_encode($patch_parameters);
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/orders/'.$orderid.'/lines/'.$lineid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);		
+
+	}
+
+	public function DELETE_ecommerce_order_line_instance ($storeid, $orderid, $lineid) {
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/orders/'.$orderid.'/lines/'.$lineid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function POST_ecommerce_products_collection ($storeid, $productid, $title, $variants = array(), $optional_parameters = array()) {
+
+		$params = array("id"=>$productid,
+						"title"=>$title,
+						"variants"=> $variants
+						);
+
+		$params = array_merge($params, $optional_parameters);
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/products/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function GET_ecommerce_products_collection ($storeid, $offset = 0, $count = 10, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/products/?offset='.$offset.'&count='.$count.$filter_string);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function GET_ecommerce_products_instance ($storeid, $productid) {
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/products/'.$productid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function DELETE_ecommerce_products_instance ($storeid, $productid) {
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/products/'.$productid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function POST_ecommerce_product_variants_collection ($storeid, $productid, $variantid, $title, $optional_parameters = array()) {
+
+		$params = array("id"=>$variantid,
+						"title"=>$title
+						);
+
+		$params = array_merge($params, $optional_parameters);
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/products/'.$productid.'/variants/');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function GET_ecommerce_product_variants_collection ($storeid, $productid, $offset = 0, $count = 10, $filters = array()) {
+
+		$filter_string = '';
+		foreach($filters as $filter_key => $filter_value) {
+			$encoded_value = urlencode($filter_value);
+			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
+		}
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/products/'.$productid.'/variants/?offset='.$offset.'&count='.$count.$filter_string);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function GET_ecommerce_product_variants_instance ($storeid, $productid, $variantid) {
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/products/'.$productid.'/variants/'.$variantid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function PATCH_ecommerce_product_variant_instance ($storeid, $productid, $variantid, $patch_parameters = array()) {
+
+		$payload = json_encode($patch_parameters);
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/products/'.$productid.'/variants/'.$variantid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH" );
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function PUT_ecommerce_product_variant_instance ($storeid, $productid, $variantid, $variantid, $title, $optional_parameters = array()) {
+
+		$params = array("id"=>$variantid,
+						"title"=>$title
+						);
+
+		$params = array_merge($params, $optional_parameters);
+
+		$payload = json_encode($params);
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/products/'.$productid.'/variants/'.$variantid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT" );
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
+
+	public function DELETE_ecommerce_product_variant_instance ($storeid, $productid, $variantid) {
+
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/products/'.$productid.'/variants/'.$variantid);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE" );
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+
+	}
 
 
 	//FILE MANAGER RESOURCES --------------------------------------------------------------------------------------------------------------
@@ -855,6 +1484,7 @@ class mailchimp {
 		$this->response = curl_exec($ch);
 		curl_close($ch);
 		return json_decode($this->response, false);
+
 	}
 
 	public function PATCH_file_manager_folders_instance ($folderid, $name) {
@@ -872,6 +1502,7 @@ class mailchimp {
 		$this->response = curl_exec($ch);
 		curl_close($ch);
 		return json_decode($this->response, false);
+
 	}
 
 	public function DELETE_file_manager_folders_instance ($folderid) {
@@ -883,6 +1514,7 @@ class mailchimp {
 		$this->response = curl_exec($ch);
 		curl_close($ch);
 		return json_decode($this->response, false);
+
 	}
 
 
@@ -1062,7 +1694,7 @@ class mailchimp {
 							   			   $name, 
 							   			   $reminder, 
 							   			   $emailtype, 
-							   			   $company, #bool
+							   			   $company, 
 										   $address_street,
 							   		   	   $address_street2,
 										   $address_city,
@@ -1747,12 +2379,16 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function POST_lists_segments_collection ($listid, $name, $conditions = array()) {
+	public function POST_lists_segments_collection ($listid, $name, $conditions = NULl, $static_segment = NULL) {
 		
 		$params = array('name'=>$name);
 
 		if (!is_null($conditions)) {
 			$params['options'] = $conditions;
+		}
+
+		if (!is_null($static_segment)) {
+			$params['static_segment'] = $static_segment;
 		}
 
 		$payload = json_encode($params);
@@ -1779,12 +2415,16 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function PATCH_lists_segments_instance ($listid, $segmentid, $name, $conditions = NULL) {
+	public function PATCH_lists_segments_instance ($listid, $segmentid, $name, $conditions = NULL, $static_segment = NULL) {
 		
 		$params = array('name'=>$name);
 
 		if (!is_null($conditions)) {
 			$params['options'] = $conditions;
+		}
+
+		if (!is_null($static_segment)) {
+			$params['static_segment'] = $static_segment;
 		}
 
 		$payload = json_encode($params);
@@ -1811,6 +2451,15 @@ class mailchimp {
 		return json_decode($this->response, false);		
 	}
 
+	public function GET_lists_segment_members($listid, $segmentid) {
+		$ch = curl_init($this->url.'/lists/'.$listid.'/segments/'.$segmentid.'/members');
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$this->response = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($this->response, false);
+	}
 
 
 
