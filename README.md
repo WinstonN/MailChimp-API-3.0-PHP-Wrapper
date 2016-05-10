@@ -33,6 +33,7 @@ Resources as they appear in MailChimp's [documentation](http://developer.mailchi
 ###Root:
 
 *GET: /*
+
 	GET_root();
 
 ###Authorized Apps:
