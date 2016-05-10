@@ -37,15 +37,9 @@ class mailchimp {
 	//AUTHORIZED APPS RESOURCES --------------------------------------------------------------------------------------------------------------------
 
 
-	public function GET_authorized_apps_collection ($offset = 0, $count = 10, $filters = array()) {
+	public function GET_authorized_apps_collection ($offset = 0, $count = 10) {
 
-		$filter_string = '';
-		foreach($filters as $filter_key => $filter_value) {
-			$encoded_value = urlencode($filter_value);
-			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
-		}
-
-		$ch = curl_init($this->url.'/authorized-apps/'.'?offset='.$offset.'&count='.$count.$filter_string);
+		$ch = curl_init($this->url.'/authorized-apps/'.'?offset='.$offset.'&count='.$count);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -90,15 +84,9 @@ class mailchimp {
 
 	//AUTOMATIONS RESOURCES ------------------------------------------------------------------------------------------------------------------------
 
-	public function GET_automations_collection ($offset = 0, $count = 10, $filters = array()) {
-		
-		$filter_string = '';
-		foreach($filters as $filter_key => $filter_value) {
-			$encoded_value = urlencode($filter_value);
-			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
-		}
+	public function GET_automations_collection ($offset = 0, $count = 10) {
 
-		$ch = curl_init($this->url.'/automations/'.'?offset='.$offset.'&count='.$count.$filter_string);
+		$ch = curl_init($this->url.'/automations/'.'?offset='.$offset.'&count='.$count);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -107,15 +95,9 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_automations_emails_collection ($workflowid, $offset = 0, $count = 10, $filters = array()) {
-		
-		$filter_string = '';
-		foreach($filters as $filter_key => $filter_value) {
-			$encoded_value = urlencode($filter_value);
-			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
-		}
+	public function GET_automations_emails_collection ($workflowid, $offset = 0, $count = 10) {
 
-		$ch = curl_init($this->url.'/automations/'.$workflowid.'/emails/'.'?offset='.$offset.'&count='.$count.$filter_string);
+		$ch = curl_init($this->url.'/automations/'.$workflowid.'/emails/'.'?offset='.$offset.'&count='.$count);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -160,15 +142,9 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_automations_emails_queue_collection ($workflowid, $emailid, $offset = 0, $count = 10, $filters = array()) {
+	public function GET_automations_emails_queue_collection ($workflowid, $emailid, $offset = 0, $count = 10) {
 
-		$filter_string = '';
-		foreach($filters as $filter_key => $filter_value) {
-			$encoded_value = urlencode($filter_value);
-			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
-		}
-
-		$ch = curl_init($this->url.'/automations/'.$workflowid.'/emails/'.$emailid.'/queue/'.'?offset='.$offset.'&count='.$count.$filter_string);
+		$ch = curl_init($this->url.'/automations/'.$workflowid.'/emails/'.$emailid.'/queue/'.'?offset='.$offset.'&count='.$count);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -363,15 +339,9 @@ class mailchimp {
 
 	//CAMPAIGNS RESOURCES ----------------------------------------------------------------------------------------------------------------------------
 
-	public function GET_campaigns_collection ($offset = 0, $count = 10, $filters = array()) {
+	public function GET_campaigns_collection ($offset = 0, $count = 10) {
 
-		$filter_string = '';
-		foreach($filters as $filter_key => $filter_value) {
-			$encoded_value = urlencode($filter_value);
-			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
-		}
-
-		$ch = curl_init($this->url.'/campaigns/'.'?offset='.$offset.'&count='.$count.$filter_string);
+		$ch = curl_init($this->url.'/campaigns/'.'?offset='.$offset.'&count='.$count);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -380,42 +350,10 @@ class mailchimp {
 		return json_decode($this->response);
 	}
 
-	public function POST_campaigns_collection ($type, 
-											   $recipients = array(), 
-											   $settings = array(), 
-											   $variate_settings = NULL, 
-											   $tracking = NULL,
-											   $rss_opts = NULL,
-											   $ab_split_opts = NULL,
-											   $social_card = NULL,
-											   $report_summary = NULL,
-											   $delivery_status = NULL
-											   ) {
-		$params = array('type'=>$type,
-						'recipients'=>$recipients,
-						'settings'=>$settings);
-
-		if (!is_null($variate_settings)) {
-			$params['variate_settings'] = $variate_settings;
-		} 
-		if (!is_null($tracking)) {
-			$params['tracking'] = $tracking;
-		}
-		if (!is_null($rss_opts)) {
-			$param['rss_opts'] = $rss_opts;
-		}
-		if (!is_null($ab_split_opts)) {
-			$params['ab_split_opts'] = $ab_split_opts;
-		}
-		if (!is_null($social_card)) {
-			$params['social_card'] = $social_card;
-		}
-		if (!is_null($report_summary)) {
-			$params['report_summary'] = $report_summary;
-		}
-		if (!is_null($delivery_status)) {
-			$params['delivery_status'] = $delivery_status;
-		}
+	public function POST_campaigns_collection ($type, $settings = array(), $optional_parameters = array()) {
+		
+		$params = array('type'=>$type, 'settings'=>$settings);
+		$params = array_merge($params, $optional_parameters);
 
 		$payload = json_encode($params);
 
@@ -512,45 +450,11 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function PATCH_campaigns_instance ($campaignid,
-											  $type, 
-											  $recipients = array(), 
-											  $settings = array(), 
-											  $variate_settings = NULL, 
-											  $tracking = NULL,
-											  $rss_opts = NULL,
-											  $ab_split_opts = NULL,
-											  $social_card = NULL,
-											  $report_summary = NULL,
-											  $delivery_status = NULL
-											  ) {
+	public function PATCH_campaigns_instance ($campaignid, $type, $settings = array(), $optional_parameters = array()) {
 
-		$params = array('type'=>$type,
-						'recipients'=>$recipients,
-						'settings'=>$settings);
-
-		if (!is_null($variate_settings)) {
-			$params['variate_settings'] = $variate_settings;
-		} 
-		if (!is_null($tracking)) {
-			$params['tracking'] = $tracking;
-		}
-		if (!is_null($rss_opts)) {
-			$param['rss_opts'] = $rss_opts;
-		}
-		if (!is_null($ab_split_opts)) {
-			$params['ab_split_opts'] = $ab_split_opts;
-		}
-		if (!is_null($social_card)) {
-			$params['social_card'] = $social_card;
-		}
-		if (!is_null($report_summary)) {
-			$params['report_summary'] = $report_summary;
-		}
-		if (!is_null($delivery_status)) {
-			$params['delivery_status'] = $delivery_status;
-		}
-
+		$params = array('type'=>$type, 'settings'=>$settings);
+		$params = array_merge($params, $optional_parameters);
+	
 		$payload = json_encode($params);
 
 		$ch = curl_init($this->url.'/campaigns/'.$campaignid);
@@ -607,35 +511,7 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}	
 
-	public function PUT_campaign_content ($campaignid,
-										  $plain_text = NULL, 
-										  $html = NULL,
-										  $url = NULL,
-										  $template = NULL,
-										  $archive = NULL,
-										  $variate_contents = NULL
-										  ) {
-
-		$params = array();
-
-		if (!is_null($plain_text)) {
-			$params['plain_text'] = $plain_text;
-		}
-		if (!is_null($html)) {
-			$params['html'] = $html;
-		}
-		if (!is_null($url)) {
-			$params['url'] = $url;
-		}
-		if (!is_null($template)) {
-			$params['template'] = $template;
-		}
-		if (!is_null($archive)) {
-			$params['archive'] = $archive;
-		}
-		if (!is_null($variate_contents)) {
-			$params['variate_contents'] = $variate_contents;
-		}
+	public function PUT_campaign_content ($campaignid, $params) {
 
 		$payload = json_encode($params);
 
@@ -661,7 +537,7 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function campaigns_pause($campaignid) {
+	public function POST_campaign_pause ($campaignid) {
 		$ch = curl_init($this->url.'/campaigns/'.$campaignid.'/actions/pause');
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
@@ -672,7 +548,7 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function campaigns_resume($campaignid) {
+	public function POST_campaigns_resume($campaignid) {
 		$ch = curl_init($this->url.'/campaigns/'.$campaignid.'/actions/resume');
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
@@ -683,7 +559,7 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function campaigns_replicate($campaignid) {
+	public function POST_campaigns_replicate($campaignid) {
 		$ch = curl_init($this->url.'/campaigns/'.$campaignid.'/actions/replicate');
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
