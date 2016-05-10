@@ -573,15 +573,9 @@ class mailchimp {
 
 	//CONVERSATIONS RESOURCES ----------------------------------------------------------------------------------------------------------------------
 
-	public function GET_conversations_collection ($offset = 0, $count = 10, $filters = array()) {
+	public function GET_conversations_collection ($offset = 0, $count = 10) {
 
-		$filter_string = '';
-		foreach($filters as $filter_key => $filter_value) {
-			$encoded_value = urlencode($filter_value);
-			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
-		}
-
-		$ch = curl_init($this->url.'/conversations/'.'?offset='.$offset.'&count='.$count.$filter_string);
+		$ch = curl_init($this->url.'/conversations/'.'?offset='.$offset.'&count='.$count);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

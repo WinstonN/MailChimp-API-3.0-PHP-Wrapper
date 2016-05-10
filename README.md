@@ -32,8 +32,7 @@ Resources as they appear in MailChimp's [documentation](http://developer.mailchi
 
 ###Root:
 
-*GET: /*
-
+	GET: /
 	GET_root();
 
 ###Authorized Apps:
@@ -180,6 +179,11 @@ Resources as they appear in MailChimp's [documentation](http://developer.mailchi
 
 	GET	/campaigns/{campaign_id}/send-checklist	
 	GET_send_checklist ($campaignid);
+
+###Conversations
+
+	GET	/conversations
+	GET_conversations_collection ($offset = 0, $count = 10);
 
 ####UPDATING THIS DOC AS YOU READ THIS.
 
