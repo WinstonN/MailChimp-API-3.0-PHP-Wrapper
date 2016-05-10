@@ -20,7 +20,7 @@ Each function returns decoded json. However the non-decoded MailChimp response c
 
 ##Pagination
 
-Some functions (primarily GET requests against collections) can paginate their returns using the $offset and $count arguments. Not providing a value for these arguments will default these arguments to $offset= 0 and $count= 10. Please see "Pagination" [HERE](http://developer.mailchimp.com/documentation/mailchimp/guides/get-started-with-mailchimp-api-3/#parameters).
+Some functions (primarily GET requests against collections) can paginate their returns using the $offset and $count arguments. Not providing a value for these arguments will default their values to $offset= 0 and $count= 10. Please see "Pagination" [HERE](http://developer.mailchimp.com/documentation/mailchimp/guides/get-started-with-mailchimp-api-3/#parameters).
 
 ##Filters
 
@@ -30,12 +30,12 @@ Top level filtering to be explored in the near future.
 
 Resources as they appear in MailChimp's [documentation](http://developer.mailchimp.com/documentation/mailchimp/reference/overview/) are on top while the method too call from the library can be found on bottom with its arguments listed.
 
-###Root:
+####Root:
 
 	GET: /
 	GET_root();
 
-###Authorized Apps:
+####Authorized Apps:
 
 	GET: /authorized-apps
 	GET_authorized_apps_collection ($offset = 0, $count = 10)
@@ -46,7 +46,7 @@ Resources as they appear in MailChimp's [documentation](http://developer.mailchi
 	POST: /authorized-apps
 	POST_authorized_apps_collection ($client_id, $client_sec);
 
-###Automations:
+####Automations:
 
 	GET: /automations
 	GET_automations_collection ($offset = 0, $count = 10);
@@ -87,7 +87,7 @@ Resources as they appear in MailChimp's [documentation](http://developer.mailchi
 	GET: /automations/{workflow_id}/removed-subscribers	
 	GET_automations_workflow_removed_subscribers ($workflowid);
 
-###Batch Operations
+####Batch Operations
 
 	POST: /batches
 	POST_batches_collection ($operations = array());
@@ -98,7 +98,7 @@ Resources as they appear in MailChimp's [documentation](http://developer.mailchi
 	GET: /batches/{batch_id}
 	GET_batches_instance ($batchid);
 
-###Campaign Folders
+####Campaign Folders
 
 	POST: /campaign-folders	
 	POST_camapigns_folders_collection ($foldername);
@@ -115,7 +115,7 @@ Resources as they appear in MailChimp's [documentation](http://developer.mailchi
 	DELETE:	/campaign-folders/{folder_id}
 	DELETE_campaigns_folders_instance ($folderid);
 
-###Campaigns
+####Campaigns
 
 	POST: /campaigns
 	POST_campaigns_collection ($type, $settings = array(), $optional_parameters = array());
@@ -180,7 +180,7 @@ Resources as they appear in MailChimp's [documentation](http://developer.mailchi
 	GET	/campaigns/{campaign_id}/send-checklist	
 	GET_send_checklist ($campaignid);
 
-###Conversations
+####Conversations
 
 	GET: /conversations
 	GET_conversations_collection ($offset = 0, $count = 10);
@@ -197,7 +197,7 @@ Resources as they appear in MailChimp's [documentation](http://developer.mailchi
 	GET: /conversations/{conversation_id}/messages/{message_id}
 	GET_conversations_messages_instance ($conversationid, $messageid);
 
-###E-commerce Stores
+####E-commerce Stores
 
 	POST: /ecommerce/stores
 	POST_ecommerce_stores_collection ($storeid, $listid, $name, $currencycode, $optional_parameters = array());
