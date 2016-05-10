@@ -2,11 +2,11 @@
 
 This is a PHP wrapper for [version 3.0 of MailChimp's API](https://kb.mailchimp.com/api)
 
-##Example [Instantiation]
+##Instantiation
 
 	$some_var = new mailchimp('APIKEY');
 
-##Example [Calling a Resource]
+##Calling a Resource
 
 Each function returns decoded json. However the non-decoded MailChimp response can still be found in the '$response' class property. If you would like to see decoded function return, then try:
 
