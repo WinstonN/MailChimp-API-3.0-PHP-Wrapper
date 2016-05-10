@@ -182,18 +182,135 @@ Resources as they appear in MailChimp's [documentation](http://developer.mailchi
 
 ###Conversations
 
-	GET	/conversations
+	GET: /conversations
 	GET_conversations_collection ($offset = 0, $count = 10);
+
+	GET: /conversations/{conversation_id}
+	GET_conversations_instance ($conversationid);
+
+	POST: /conversations/{conversation_id}/messages
+	POST_conversations_messages_collection ($conversationid, $fromemail, $read, $subject, $message);
+
+	GET: /conversations/{conversation_id}/messages
+	GET_conversations_messages_collection ($conversationid);
+
+	GET: /conversations/{conversation_id}/messages/{message_id}
+	GET_conversations_messages_instance ($conversationid, $messageid);
+
+###E-commerce Stores
+
+	POST: /ecommerce/stores
+	POST_ecommerce_stores_collection ($storeid, $listid, $name, $currencycode, $optional_parameters = array());
+
+	GET: /ecommerce/stores
+	GET_ecommerce_stores_collection ($offset = 0, $count = 10);
+
+	GET: /ecommerce/stores/{store_id}
+	GET_ecommerce_stores_instance ($storeid);
+
+	PATCH: /ecommerce/stores/{store_id}
+	PATCH_ecommerce_stores_instance ($storeid, $update_params = array());
+
+	DELETE: /ecommerce/stores/{store_id}
+	DELETE_ecommerce_stores_instance ($storeid);
+
+	POST: /ecommerce/stores/{store_id}/carts
+	POST_ecommerce_carts_collection ($storid, $cartid, $customer = array(), $currency_code, $order_total, $lines, $optional_parameters = array());
+
+	GET: /ecommerce/stores/{store_id}/carts
+	GET_ecommerce_carts_collection ($storeid, $offset = 0, $count = 10, $filters = array());
+
+	GET: /ecommerce/stores/{store_id}/carts/{cart_id}
+	GET_ecommerce_carts_instance ($storeid, $cartid);
+
+	DELETE: /ecommerce/stores/{store_id}/carts/{cart_id}
+	DELETE_ecommerce_carts_instance ($storeid, $cartid);
+
+	POST: /ecommerce/stores/{store_id}/customers
+	POST_ecommerce_customers_collection ($storeid, $customerid, $customer_email, $opt_in_status, $optional_parameters= array());
+
+	GET: /ecommerce/stores/{store_id}/customers
+	GET_ecommerce_customers_collection ($storeid, $offset = 0, $count = 10);
+
+	GET: /ecommerce/stores/{store_id}/customers/{customer_id}
+	GET_ecommerce_customers_instance ($storeid, $customerid);
+
+	PATCH: /ecommerce/stores/{store_id}/customers/{customer_id}	
+	PATCH_ecommerce_customer_instance ($storeid, $customerid, $patch_parameters = array());
+
+	PUT: /ecommerce/stores/{store_id}/customers/{customer_id}
+	PUT_ecommerce_customer_instance ($storeid, $customerid, $customer_email, $opt_in_status, $optional_parameters = array());
+
+	DELETE: /ecommerce/stores/{store_id}/customers/{customer_id}
+	DELETE_ecommerce_customer_instance ($storeid, $customerid);
+
+	POST: /ecommerce/stores/{store_id}/orders
+	POST_ecommerce_orders_collection ($storeid, $orderid, $customer = array(), $currency_code, $order_total, $lines, $optional_parameters = array());
+
+	GET: /ecommerce/stores/{store_id}/orders
+	GET_ecommerce_orders_collection ($storeid, $offset = 0, $count = 10);
+
+	GET	/ecommerce/stores/{store_id}/orders/{order_id}
+	GET_ecommerce_order_instance ($storeid, $orderid);
+
+	PATCH: /ecommerce/stores/{store_id}/orders/{order_id}
+	PATCH_ecommerce_order_instance ($storeid, $orderid, $patch_parameters = array());
+
+	DELETE: /ecommerce/stores/{store_id}/orders/{order_id}
+	DELETE_ecommerce_order_instance ($storeid, $orderid);
+
+	POST: /ecommerce/stores/{store_id}/orders/{order_id}/lines
+	POST_ecommerce_order_lines_collection ($storeid, $orderid, $lineid, $productid, $product_varientid, $quantity, $price);
+
+	GET: /ecommerce/stores/{store_id}/orders/{order_id}/lines
+	GET_ecommerce_order_lines_collection ($storeid, $orderid, $offset = 0, $count = 10);
+
+	GET	/ecommerce/stores/{store_id}/orders/{order_id}/lines/{line_id}
+	GET_ecommerce_order_lines_instance ($storeid, $orderid, $lineid);
+
+	PATCH: /ecommerce/stores/{store_id}/orders/{order_id}/lines/{line_id}
+	PATCH_ecommerce_order_line_instance ($storeid, $orderid, $lineid, $patch_parameters = array());
+
+	DELETE: /ecommerce/stores/{store_id}/orders/{order_id}/lines/{line_id}
+	DELETE_ecommerce_order_line_instance ($storeid, $orderid, $lineid);
+
+	POST: /ecommerce/stores/{store_id}/products
+	POST_ecommerce_products_collection ($storeid, $productid, $title, $variants = array(), $optional_parameters = array());
+
+	GET: /ecommerce/stores/{store_id}/products
+	GET_ecommerce_products_collection ($storeid, $offset = 0, $count = 10);
+
+	GET: /ecommerce/stores/{store_id}/products/{product_id}	
+	GET_ecommerce_products_instance ($storeid, $productid);
+
+	DELETE: /ecommerce/stores/{store_id}/products/{product_id}
+	DELETE_ecommerce_products_instance ($storeid, $productid);
+
+	POST: /ecommerce/stores/{store_id}/products/{product_id}/variants
+	POST_ecommerce_product_variants_collection ($storeid, $productid, $variantid, $title, $optional_parameters = array());
+
+	GET	/ecommerce/stores/{store_id}/products/{product_id}/variants	
+	GET_ecommerce_product_variants_collection ($storeid, $productid, $offset = 0, $count = 10);
+
+	GET	/ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}
+	GET_ecommerce_product_variants_instance ($storeid, $productid, $variantid);
+
+	PATCH: /ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}	
+	GET_ecommerce_product_variants_instance ($storeid, $productid, $variantid)
+
+	PUT: /ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}
+	PUT_ecommerce_product_variant_instance ($storeid, $productid, $variantid, $variantid, $title, $optional_parameters = array());
+
+	DELETE: /ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}
+	DELETE_ecommerce_product_variant_instance ($storeid, $productid, $variantid);
 
 ####UPDATING THIS DOC AS YOU READ THIS.
 
 ##Notes
 
-- Functions with endpoints that require a member_id use the $email_address argument to generate this ID (MD5 hash of lowercase email address). All that is needed is to pass the email address as a string.
-
 - In almost all endpoints requiring a subscriber hash this library only requires the email address, and will generate the hash on it's own. 
 
-- If you do not wish to update a field while PATCHing pass it's argument as (null). 
+- non-required body parameters for POST, PUT, & PATCH requests should be placed in $optional_parameters for that method.
 
 - Timestamp format: "YYYY/MM/DD HH:MM:SS"
 

@@ -594,15 +594,9 @@ class mailchimp {
 		return json_decode($this->response, false);
 	}
 
-	public function GET_conversations_messages_collection ($conversationid, $filters = array()) {
+	public function GET_conversations_messages_collection ($conversationid) {
 
-		$filter_string = '';
-		foreach($filters as $filter_key => $filter_value) {
-			$encoded_value = urlencode($filter_value);
-			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
-		}
-
-		$ch = curl_init($this->url.'/conversations/'.$conversationid.'/messages/'.$filter_string);
+		$ch = curl_init($this->url.'/conversations/'.$conversationid.'/messages/');
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -644,15 +638,9 @@ class mailchimp {
 
 	//ECOMMERCE ENDPOINTS -----------------------------------------------------------------------------------------------------------------
 
-	public function GET_ecommerce_stores_collection ($offset = 0, $count = 10, $filters = array()) {
+	public function GET_ecommerce_stores_collection ($offset = 0, $count = 10) {
 
-		$filter_string = '';
-		foreach($filters as $filter_key => $filter_value) {
-			$encoded_value = urlencode($filter_value);
-			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
-		}
-
-		$ch = curl_init($this->url.'/ecommerce/stores/'.'?offset='.$offset.'&count='.$count.$filter_string);
+		$ch = curl_init($this->url.'/ecommerce/stores/'.'?offset='.$offset.'&count='.$count);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -822,15 +810,9 @@ class mailchimp {
 
 	}
 
-	public function GET_ecommerce_customers_collection ($storeid, $offset = 0, $count = 10, $filters = array()) {
+	public function GET_ecommerce_customers_collection ($storeid, $offset = 0, $count = 10) {
 
-		$filter_string = '';
-		foreach($filters as $filter_key => $filter_value) {
-			$encoded_value = urlencode($filter_value);
-			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
-		}
-
-		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/customers/?offset='.$offset.'&count='.$count.$filter_string);
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/customers/?offset='.$offset.'&count='.$count);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -929,15 +911,9 @@ class mailchimp {
 
 	}
 
-	public function GET_ecommerce_orders_collection ($storeid, $offset = 0, $count = 10, $filters = array()) {
+	public function GET_ecommerce_orders_collection ($storeid, $offset = 0, $count = 10) {
 
-		$filter_string = '';
-		foreach($filters as $filter_key => $filter_value) {
-			$encoded_value = urlencode($filter_value);
-			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
-		}
-
-		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/orders/?offset='.$offset.'&count='.$count.$filter_string);
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/orders/?offset='.$offset.'&count='.$count);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1011,15 +987,9 @@ class mailchimp {
 
 	}
 
-	public function GET_ecommerce_order_lines_collection ($storeid, $orderid, $offset = 0, $count = 10, $filters = array()) {
+	public function GET_ecommerce_order_lines_collection ($storeid, $orderid, $offset = 0, $count = 10) {
 
-		$filter_string = '';
-		foreach($filters as $filter_key => $filter_value) {
-			$encoded_value = urlencode($filter_value);
-			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
-		}
-
-		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/orders/'.$orderid.'/lines/?offset='.$offset.'&count='.$count.$filter_string);
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/orders/'.$orderid.'/lines/?offset='.$offset.'&count='.$count);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1096,15 +1066,9 @@ class mailchimp {
 
 	}
 
-	public function GET_ecommerce_products_collection ($storeid, $offset = 0, $count = 10, $filters = array()) {
+	public function GET_ecommerce_products_collection ($storeid, $offset = 0, $count = 10) {
 
-		$filter_string = '';
-		foreach($filters as $filter_key => $filter_value) {
-			$encoded_value = urlencode($filter_value);
-			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
-		}
-
-		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/products/?offset='.$offset.'&count='.$count.$filter_string);
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/products/?offset='.$offset.'&count='.$count);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1161,15 +1125,9 @@ class mailchimp {
 
 	}
 
-	public function GET_ecommerce_product_variants_collection ($storeid, $productid, $offset = 0, $count = 10, $filters = array()) {
+	public function GET_ecommerce_product_variants_collection ($storeid, $productid, $offset = 0, $count = 10) {
 
-		$filter_string = '';
-		foreach($filters as $filter_key => $filter_value) {
-			$encoded_value = urlencode($filter_value);
-			$filter_string .= '&' . $filter_key . '=' . $encoded_value;
-		}
-
-		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/products/'.$productid.'/variants/?offset='.$offset.'&count='.$count.$filter_string);
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/products/'.$productid.'/variants/?offset='.$offset.'&count='.$count);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
