@@ -192,6 +192,6 @@ Resources as they appear in MailChimp's [documentation](http://developer.mailchi
 
 - Timestamp format: "YYYY/MM/DD HH:MM:SS"
 
-![OMFGDOGS](omfgdogs.com/omfgdogs.gif)
+![OMFGDOGS](http://omfgdogs.com/omfgdogs.gif)
 
 
