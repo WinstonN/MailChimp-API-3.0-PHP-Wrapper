@@ -192,6 +192,8 @@ Resources as they appear in MailChimp's [documentation](http://developer.mailchi
 
 - Timestamp format: "YYYY/MM/DD HH:MM:SS"
 
+If you dont feel like this helps you or brightens your day, then this .gif of some dogs is the best I can do.
+
 ![OMFGDOGS](http://omfgdogs.com/omfgdogs.gif)
 
 
