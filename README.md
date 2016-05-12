@@ -461,6 +461,24 @@ Resources as they appear in MailChimp's [documentation](http://developer.mailchi
 	GET: /lists/{list_id}/segments
 	GET_lists_segments_collection ($listid, $offset = 0, $count = 10);
 
+	GET: /lists/{list_id}/segments/{segment_id}
+	GET_lists_segments_instance ($listid, $segmentid);
+
+	PATCH: /lists/{list_id}/segments/{segment_id}	
+	PATCH_lists_segments_instance ($listid, $segmentid, $name, $conditions = NULL, $static_segment = NULL);
+
+	DELETE: /lists/{list_id}/segments/{segment_id}
+	DELETE_lists_segments_instance ($listid, $segmentid);
+
+	POST: /lists/{list_id}/segments/{segment_id}/members
+	COMING SOON
+
+	GET: /lists/{list_id}/segments/{segment_id}/members	
+	COMING SOON
+
+	DELETE: /lists/{list_id}/segments/{segment_id}/members/{subscriber_hash}
+	
+
 ####UPDATING THIS DOC AS YOU READ THIS.
 
 ##Notes
