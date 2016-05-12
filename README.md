@@ -26,7 +26,7 @@ Some functions (primarily GET requests against collections) can paginate their r
 
 Top level filtering to be explored in the near future.
 
-##Resources & Their Functions
+##API Resources & Their Associated Funtions
 
 Resources as they appear in MailChimp's [documentation](http://developer.mailchimp.com/documentation/mailchimp/reference/overview/) are on top while the method too call from the library can be found on bottom with its arguments listed.
 
@@ -303,6 +303,163 @@ Resources as they appear in MailChimp's [documentation](http://developer.mailchi
 
 	DELETE: /ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}
 	DELETE_ecommerce_product_variant_instance ($storeid, $productid, $variantid);
+
+####File Manager Files
+
+	POST: /file-manager/files
+	POST_file_manager_files_collection ($name, $fileurl);
+
+	GET: /file-manager/files
+	GET_file_manager_files_collection ($offset = 0, $count = 10);
+
+	GET: /file-manager/files/{file_id}
+	GET_file_manager_files_instance ($fileid);
+
+	PATCH: /file-manager/files/{file_id}
+	PATCH_file_manager_files_instance ($fileid, $folderid);
+
+	DELETE: /file-manager/files/{file_id}	
+	DELETE_file_manager_files_instance ($fileid)
+
+####File Manager Folders
+
+	POST: /file-manager/folders
+	POST_file_manager_folders_collection ($folderid, $name);
+
+	GET: /file-manager/folders
+	GET_file_manager_folders_collection ($offset = 0, $count = 10);
+
+	GET: /file-manager/folders/{folder_id}
+	GET_file_manager_folders_instance ($folderid);
+
+	PATCH: /file-manager/folders/{folder_id}
+	PATCH_file_manager_folders_instance ($folderid, $name);
+
+	DELETE: /file-manager/folders/{folder_id}
+	DELETE_file_manager_folders_instance ($folderid);
+
+####Lists
+	
+	POST: /lists
+	POST_lists_collection ($name,$reminder,$emailtype, $company, $address_street, $address_street2, $address_city, $address_state, $address_zip, $country, $from_name, $from_email, $subject, $language, $optional_parameters = array());
+
+	GET: /lists
+	GET_lists_collection ($offset = 0, $count = 10);
+
+	GET: /lists/{list_id}
+	GET_lists_instance ($listid);
+
+	
+	PATCH: /lists/{list_id}
+	PATCH_lists_instance ($listid, $name, $reminder, $emailtype, $company, $address_street, $address_street2, $address_city, $address_state, $address_zip, $country, $from_name, $from_email, $subject, $language);
+
+	DELETE: /lists/{list_id}	
+	DELETE_lists_instance ($listid);
+
+	GET: /lists/{list_id}/abuse-reports
+	GET_list_abuse_collection ($listid);	
+
+	GET: /lists/{list_id}/abuse-reports/{report_id}
+	GET_list_abuse_instance ($listid, $reportid);
+
+	GET: /lists/{list_id}/activity
+	GET_lists_activity_collection ($listid, $offset = 0, $count = 10);
+
+	GET: /lists/{list_id}/clients
+	GET_lists_clients_collection ($listid);
+
+	GET: /lists/{list_id}/growth-history
+	GET_lists_growth_history_collection ($listid);
+
+	GET: /lists/{list_id}/growth-history/{month}
+	GET_lists_growth_history_instance ($listid, $month);
+
+	POST: /lists/{list_id}/interest-categories
+	POST_lists_interests_categories_collection ($listid, $title, $type);
+
+	GET: /lists/{list_id}/interest-categories
+	GET_lists_interests_categories_collection ($listid,  $offset = 0, $count = 10);
+
+	GET: /lists/{list_id}/interest-categories/{interest_category_id}
+	GET_lists_interests_categories_instance ($listid, $category_id);
+
+	PATCH: /lists/{list_id}/interest-categories/{interest_category_id}
+	COMING SOON
+
+	DELETE: /lists/{list_id}/interest-categories/{interest_category_id}
+	COMING SOON
+
+	GET: /lists/{list_id}/interest-categories/{interest_category_id}/interests
+	GET_list_interests_collection ($listid, $category_id, $offset = 0, $count = 10);
+
+	GET: /lists/{list_id}/interest-categories/{interest_category_id}/interests/{interest_id}
+	GET_lists_interests_instance ($listid, $category_id, $groupid);
+
+	PATCH: /lists/{list_id}/interest-categories/{interest_category_id}/interests/{interest_id}
+	PATCH_lists_interests_instance ($listid, $category_id, $interestid, $name);
+
+	DELETE: /lists/{list_id}/interest-categories/{interest_category_id}/interests/{interest_id}	
+	DELETE_lists_interests_instance ($listid, $category_id, $interestid);
+
+	POST: /lists/{list_id}/members
+	POST_list_members_collection ($listid, $emailaddress, $status, $optional_parameters = array());
+
+	GET: /lists/{list_id}/members
+	GET_list_members_collection ($listid, $offset = 0, $count = 10);
+
+	GET: /lists/{list_id}/members/{subscriber_hash}	
+	GET_list_members_instance ($listid, $emailaddress);
+
+	PATCH: /lists/{list_id}/members/{subscriber_hash}
+	PATCH_list_members_instance ($listid, $emailaddress, $optional_parameters = array());
+
+	PUT: /lists/{list_id}/members/{subscriber_hash}	
+	PUT_list_members_instance ($listid, $emailaddress, $status, $optional_parameters = array());
+
+	DELETE: /lists/{list_id}/members/{subscriber_hash}
+	DELETE_list_members_instance ($listid, $emailaddress);
+
+	GET: /lists/{list_id}/members/{subscriber_hash}/activity
+	GET_lists_members_activity_collection ($listid, $emailaddress);
+
+	GET: /lists/{list_id}/members/{subscriber_hash}/goals
+	GET_lists_members_goals_collection ($listid, $emailaddress);
+
+	POST: /lists/{list_id}/members/{subscriber_hash}/notes
+	POST_lists_members_notes_collection ($listid, $emailaddress, $note)
+	
+	GET: /lists/{list_id}/members/{subscriber_hash}/notes
+	GET_lists_members_notes_collection ($listid, $emailaddress);
+
+	GET: /lists/{list_id}/members/{subscriber_hash}/notes/{note_id}
+	GET_lists_members_notes_instance ($listid, $emailaddress, $noteid);
+
+	PATCH: /lists/{list_id}/members/{subscriber_hash}/notes/{note_id}	
+	PATCH_lists_members_notes_instance ($listid, $emailaddress, $noteid, $note);
+
+	DELETE:	/lists/{list_id}/members/{subscriber_hash}/notes/{note_id}
+	DELETE_lists_members_notes_instance ($listid, $emailaddress, $noteid);
+
+	POST: /lists/{list_id}/merge-fields
+	POST_lists_merge_fields_collection ($listid, $name, $type, $required, $default_value, $visible);
+
+	GET: /lists/{list_id}/merge-fields
+	GET_lists_merge_fields_collection ($listid, $offset = 0, $count = 10);
+
+	GET: /lists/{list_id}/merge-fields/{merge_id}
+	GET_lists_merge_fields_instance ($listid, $mergeid);
+
+	PATCH: /lists/{list_id}/merge-fields/{merge_id}
+	PATCH_lists_merge_fields_instance ($listid, $mergeid, $name, $type, $required, $default_value, $visible);
+
+	DELETE: /lists/{list_id}/merge-fields/{merge_id}
+	DELETE_lists_merge_field_instance ($listid, $mergeid);
+
+	POST: /lists/{list_id}/segments
+	POST_lists_segments_collection ($listid, $name, $conditions = NULl, $static_segment = NULL);
+
+	GET: /lists/{list_id}/segments
+	GET_lists_segments_collection ($listid, $offset = 0, $count = 10);
 
 ####UPDATING THIS DOC AS YOU READ THIS.
 
