@@ -477,6 +477,8 @@ Resources as they appear in MailChimp's [documentation](http://developer.mailchi
 	COMING SOON
 
 	DELETE: /lists/{list_id}/segments/{segment_id}/members/{subscriber_hash}
+	COMING SOON
+
 	
 
 ####UPDATING THIS DOC AS YOU READ THIS.
