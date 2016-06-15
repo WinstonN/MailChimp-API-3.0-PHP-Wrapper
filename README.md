@@ -481,7 +481,7 @@ Resources as they appear in MailChimp's [documentation](http://developer.mailchi
 
 	
 
-####UPDATING THIS DOC AS YOU READ THIS.
+####THIS LIST IS NOT COMPLETE BUT ALL ENDPOINT ARE PRESENT WITHIN THE WRAPPER. I WILL UPDATE THE README TO REFLECT THIS SOON.
 
 ##Notes
 
