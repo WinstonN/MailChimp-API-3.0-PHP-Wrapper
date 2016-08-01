@@ -718,7 +718,7 @@ class mailchimp {
 
 	}
 
-	public function POST_ecommerce_carts_collection ($storid, $cartid, $customer = array(), $currency_code, $order_total, $lines, $optional_parameters = array()) {
+	public function POST_ecommerce_carts_collection ($storeid, $cartid, $customer = array(), $currency_code, $order_total, $lines, $optional_parameters = array()) {
 
 		$params = array("id" => $cartid,
 						"customer" => $customer,
@@ -798,7 +798,7 @@ class mailchimp {
 
 		$payload = json_encode($params);
 
-		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/customers/');
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/customers/');
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_POST, true);
@@ -838,7 +838,7 @@ class mailchimp {
 
 		$payload = json_encode($patch_parameters);
 
-		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/customers/'.$customerid);
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/customers/'.$customerid);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
@@ -861,7 +861,7 @@ class mailchimp {
 
 		$payload = json_encode($params);
 
-		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/customers/'.$customerid);
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/customers/'.$customerid);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
@@ -875,7 +875,7 @@ class mailchimp {
 
 	public function DELETE_ecommerce_customer_instance ($storeid, $customerid) {
 
-		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/customers/'.$customerid);
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/customers/'.$customerid);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
@@ -899,7 +899,7 @@ class mailchimp {
 
 		$payload = json_encode($params);
 
-		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/orders/');
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/orders/');
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_POST, true);
@@ -939,7 +939,7 @@ class mailchimp {
 
 		$payload = json_encode($patch_parameters);
 
-		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/orders/'.$orderid);
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/orders/'.$orderid);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
@@ -953,7 +953,7 @@ class mailchimp {
 
 	public function DELETE_ecommerce_order_instance ($storeid, $orderid) {
 
-		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/orders/'.$orderid);
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/orders/'.$orderid);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
@@ -1018,7 +1018,7 @@ class mailchimp {
 
 		$payload = json_encode($patch_parameters);
 
-		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/orders/'.$orderid.'/lines/'.$lineid);
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/orders/'.$orderid.'/lines/'.$lineid);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
@@ -1032,7 +1032,7 @@ class mailchimp {
 
 	public function DELETE_ecommerce_order_line_instance ($storeid, $orderid, $lineid) {
 
-		$ch = curl_init($this->url.'/ecommerce/stores/'.$storid.'/orders/'.$orderid.'/lines/'.$lineid);
+		$ch = curl_init($this->url.'/ecommerce/stores/'.$storeid.'/orders/'.$orderid.'/lines/'.$lineid);
 		//curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->auth);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
