@@ -1335,7 +1335,7 @@ class mailchimp {
 
 	public function POST_file_manager_folders_collection ($folderid, $name) {
 
-		$params = array('name'=$name);
+		$params = array('name'=>$name);
 		$payload = json_encode($params);
 
 		$ch = curl_init($this->url.'/file-manager/folders/');
